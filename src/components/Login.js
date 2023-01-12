@@ -1,27 +1,39 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
 
 function Login() {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 
+  const navigate = useNavigate()
 
 
-  function handleSubmit (e){
+  async function handleSubmit(e) {
     e.preventDefault()
-  }
-
-  const loginUser = async () =>{
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password)
-      console.log(user)
-    } catch (error) {
+      await signInWithEmailAndPassword(auth, email, password)
+      navigate ("/")
+     } catch (error) {
       console.log(error.message)
     }
   }
+  
+  useEffect(() =>{
+    const unSubscribe = onAuthStateChanged(auth, (currentUser)=>{
+      console.log(currentUser); 
+    })
+    return ()=>{
+      unSubscribe();
+    };
+  },[]);
+  
+  
   return (
     <>
     <Card>
@@ -38,8 +50,10 @@ function Login() {
         </Form.Group>
       </Form>
       </Card.Body>
-      <Button className="w-100 mt-2" onClick={loginUser}>Login</Button>
-      <div className="text-center">Forgot password</div>
+      <Button className="w-100 mt-2" >Login</Button>
+      <div className="text-center">
+        you need an account?<Link to="/signup"> Signup</Link>
+      </div>
       </Card>
     </>
   )
