@@ -10,8 +10,16 @@ import { useNavigate } from 'react-router-dom'
 function Login() {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
-
   const navigate = useNavigate()
+  //const [error, setError] = useState()
+
+  /*function validate(){
+    if (password.length !== 6){
+      setError("The password should consist of 6 characters")
+    }else{
+      setError("logged in successfully")
+    }
+  }*/
 
 
   async function handleSubmit(e) {
@@ -39,7 +47,7 @@ function Login() {
     <Card>
       <Card.Body>
       <h1 className="text-center" >Login</h1>
-      <Form onSubmit={handleSubmit}>
+      <Form >
         <Form.Group>
           <Form.Label>Email:</Form.Label>
           <Form.Control type='email' onChange={(e) => setEmail(e.target.value)} required/>
@@ -50,9 +58,12 @@ function Login() {
         </Form.Group>
       </Form>
       </Card.Body>
-      <Button className="w-100 mt-2" >Login</Button>
+      <Button className="w-100 mt-2" onClick={handleSubmit}>Login</Button>
       <div className="text-center">
         you need an account?<Link to="/signup"> Signup</Link>
+      </div>
+      <div className="text-center">
+        <Link to="/signup">Forgot password?</Link>
       </div>
       </Card>
     </>
